@@ -58,11 +58,11 @@ module.exports = function(grunt) {
     watch: {
       gruntfile: {
         files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
+        tasks: ['concat', 'copy', 'jshint:gruntfile']
       },
       lib: {
-        files: '<%= jshint.lib.src %>',
-        tasks: ['jshint:lib']//, 'nodeunit'
+        files: ['<%= jshint.lib.src %>', 'lib/**/*.html'],
+        tasks: ['concat', 'copy']//, 'nodeunit','jshint:lib', 
       },
       test: {
         files: '<%= jshint.test.src %>',
@@ -87,7 +87,8 @@ module.exports = function(grunt) {
             src: [
               'jquery/jquery.js',
               'handlebars/handlebars.js',
-              'ember/ember.js'
+              'ember/ember.js',
+              'ember-data/ember-data.js'
             ],
             dest: 'dist/vendor/'
           }
@@ -119,5 +120,5 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ['concat', 'uglify']);//'jshint', 'nodeunit',
-  grunt.registerTask('dev', ['concat', 'watch', 'copy']);
+  //grunt.registerTask('dev', ['concatwatch']);
 };

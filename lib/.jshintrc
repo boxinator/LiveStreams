@@ -10,5 +10,5 @@
   "boss": true,
   "eqnull": true,
   "predef": ["exports", "Ember"],
-  "globals": { "App": true }
+  "globals": { "App": true, "console": true, "window": true, "debugger": true}
 }
