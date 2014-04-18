@@ -21,7 +21,8 @@ module.exports = function(grunt) {
       js: 'lib/**/*.js',
       hbs: 'lib/templates/**/*.hbs',
       test: 'test/**/*.js',
-      dest: 'dist/<%= pkg.name %>'
+      dest: 'dist/<%= pkg.name %>',
+      dest_tpl: 'dist/<%= pkg.name %>-templates.js'
     },
     // Task configuration.
     concat: {
@@ -40,7 +41,7 @@ module.exports = function(grunt) {
         banner: '<%= banner %>'
       },
       dist: {
-        src: '<%= locations.dest %>.js',
+        src: ['<%= locations.dest %>.js', '<%= locations.dest_tpl %>'],
         dest: '<%= locations.dest %>.min.js'
       },
     },
@@ -68,15 +69,15 @@ module.exports = function(grunt) {
     },
 
     handlebars: {
-      compile: {
+     compile: {
         options: {
-          namespace: "JST"
+          namespace: "App.templates"
+        },
+        files: {
+          '<%= locations.dest %>-templates.js': ['<%= locations.hbs %>']
         }
-      },
-      
-      files: {
-        '<%= locations.dest %>-templates.js': '<%= locations.hbs %>'
       }
+        
     },
 
     watch: {
