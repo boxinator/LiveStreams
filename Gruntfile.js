@@ -11,8 +11,17 @@ module.exports = function(grunt) {
       '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
-    dirs: {
 
+    //settings: grunt.file.readJSON('settings.json'),
+
+    locations: {
+      gruntFile: 'Gruntfile.js',
+      html: 'lib/**/*.html',
+      css: 'lib/**/*.css',
+      js: 'lib/**/*.js',
+      hbs: 'lib/templates/**/*.hbs',
+      test: 'test/**/*.js',
+      dest: 'dist/<%= pkg.name %>'
     },
     // Task configuration.
     concat: {
@@ -22,50 +31,65 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['lib/app.js'],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: '<%= locations.dest %>.js'
       },
     },
+
     uglify: {
       options: {
         banner: '<%= banner %>'
       },
       dist: {
-        src: '<%= concat.dist.dest %>',
-        dest: 'dist/<%= pkg.name %>.min.js'
+        src: '<%= locations.dest %>.js',
+        dest: '<%= locations.dest %>.min.js'
       },
     },
+
     nodeunit: {
       files: ['test/**/*_test.js']
     },
+
     jshint: {
       options: {
         jshintrc: '.jshintrc'
       },
       gruntfile: {
-        src: 'Gruntfile.js'
+        src: '<%= locations.gruntFile %>'
       },
       lib: {
         options: {
           jshintrc: 'lib/.jshintrc'
         },
-        src: ['lib/**/*.js']
+        src: '<%= locations.js %>'
       },
       test: {
-        src: ['test/**/*.js']
+        src: '<%= locations.test %>'
       },
+    },
+
+    handlebars: {
+      compile: {
+        options: {
+          namespace: "JST"
+        }
+      },
+      
+      files: {
+        '<%= locations.dest %>-templates.js': '<%= locations.hbs %>'
+      }
     },
 
     watch: {
       gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
+        files: '<%= locations.gruntFile %>',
         tasks: ['concat', 'copy', 'jshint:gruntfile']
       },
       lib: {
-        files: ['<%= jshint.lib.src %>', 'lib/**/*.html'],
-        tasks: ['concat', 'copy']//, 'nodeunit','jshint:lib', 
+        files: ['<%= locations.js %>', '<%= locations.html %>', '<%= locations.hbs %>'],
+        tasks: ['handlebars', 'concat', 'copy']//, 'nodeunit','jshint:lib', 
       },
       test: {
-        files: '<%= jshint.test.src %>',
+        files: '<%= locations.test %>',
         tasks: ['jshint:test']//, 'nodeunit'
       },
     },
@@ -115,6 +139,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
 

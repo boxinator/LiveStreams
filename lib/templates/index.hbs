@@ -1,0 +1,13 @@
+<ul>
+	{{#each item in content}}
+	{{log item.channel}}
+		<li>
+			<h2>{{item.game}}</h2>
+			{{#with item.channel}}
+				<h4><a {{bind-attr href=url}}>{{display_name}}</a></h4>
+			{{/with}}
+			<p>{{item.viewers}}</p>
+			<img {{bind-attr src=item.preview.small}} /> </li>
+	{{/each}}
+	
+</ul>
