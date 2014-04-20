@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['lib/app.js'],
+        src: ['<%= locations.js %>', '<%= locations.dest_tpl %>'],
         dest: '<%= locations.dest %>.js'
       },
     },
@@ -68,26 +68,25 @@ module.exports = function(grunt) {
       },
     },
 
-    handlebars: {
+    emberTemplates: {
      compile: {
         options: {
-          namespace: "App.templates"
+          templateBasePath: "lib/templates"
         },
         files: {
           '<%= locations.dest %>-templates.js': ['<%= locations.hbs %>']
         }
       }
-        
     },
 
     watch: {
       gruntfile: {
         files: '<%= locations.gruntFile %>',
-        tasks: ['concat', 'copy', 'jshint:gruntfile']
+        tasks: ['emberTemplates','concat', 'copy', 'jshint:gruntfile']
       },
       lib: {
         files: ['<%= locations.js %>', '<%= locations.html %>', '<%= locations.hbs %>'],
-        tasks: ['handlebars', 'concat', 'copy']//, 'nodeunit','jshint:lib', 
+        tasks: ['emberTemplates', 'concat', 'copy']//, 'nodeunit','jshint:lib', 
       },
       test: {
         files: '<%= locations.test %>',
@@ -140,9 +139,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-ember-templates');
 
   // Default task.
   grunt.registerTask('default', ['concat', 'uglify']);//'jshint', 'nodeunit',

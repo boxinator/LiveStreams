@@ -1,0 +1,4 @@
+
+App.StreamsController = Ember.ArrayController.extend({
+	scrolling: false
+});
