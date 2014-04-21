@@ -11,23 +11,20 @@ App.StreamSerializer = DS.RESTSerializer.extend({
 	extractArray: function(store, type, payload, id, requestType) {
 		var previews = [];
 		var channels = [];
-		var index = 0;
 		payload.streams.forEach(function(item) {
 			// create a preview object and give an id
 			var preview = item.preview;
-			preview._id = index;
+			preview._id = item._id;
 			previews.push(preview);
 			// create a channel object and give an id
 			var channel = item.channel;
-			channel._id = index;
+			channel._id = item._id;
 			channels.push(channel);
 
 			// after building preview object, replace preview in stream object with id 
 			// Otherwise will get store undefined error
-			item.preview = index;
-			item.channel = index;
-
-			index++;
+			item.preview = item._id;
+			item.channel = item._id;
 		});
 		// add previews array to payload
 		payload.previews = previews;

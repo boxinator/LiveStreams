@@ -1,4 +1,6 @@
 App.Router.map(function() {
-	this.route('streams');
+	this.resource('streams', function() {
+		this.route('featured');
+	});
 })
 
