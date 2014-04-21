@@ -16,10 +16,12 @@ module.exports = function(grunt) {
 
     locations: {
       gruntFile: 'Gruntfile.js',
-      html: 'lib/**/*.html',
-      css: 'lib/**/*.css',
-      js: 'lib/**/*.js',
-      hbs: 'lib/templates/**/*.hbs',
+      html: 'src/**/*.html',
+      less: 'src/less/app/**/*.less',
+      js: 'src/js/**/*.js',
+      hbs: 'src/js/templates/**/*.hbs',
+      bootstrap_css: 'src/less/bootstrap/bootstrap.less',
+      bootstrap_js: '../../../bower_components/bootstrap/js/',
       test: 'test/**/*.js',
       dest: 'dist/<%= pkg.name %>',
       dest_tpl: 'dist/<%= pkg.name %>-templates.js'
@@ -30,10 +32,23 @@ module.exports = function(grunt) {
         banner: '<%= banner %>',
         stripBanners: true
       },
-      dist: {
+      app: {
         src: ['<%= locations.js %>', '<%= locations.dest_tpl %>'],
         dest: '<%= locations.dest %>.js'
       },
+      bootstrap: {
+        src: [
+          '<%= locations.bootstrap %>/affix.js',
+          '<%= locations.bootstrap %>/alert.js',
+          '<%= locations.bootstrap %>/button.js',
+          '<%= locations.bootstrap %>/carousel.js',
+          '<%= locations.bootstrap %>/collapse.js',
+          '<%= locations.bootstrap %>/dropdown.js',
+          '<%= locations.bootstrap %>/modal.js',
+          '<%= locations.bootstrap %>/popover.js',
+        ],
+        dest: '<%= locations.dest %>-bootstrap.js'
+      }
     },
 
     uglify: {
@@ -41,9 +56,9 @@ module.exports = function(grunt) {
         banner: '<%= banner %>'
       },
       dist: {
-        src: ['<%= locations.dest %>.js', '<%= locations.dest_tpl %>'],
-        dest: '<%= locations.dest %>.min.js'
-      },
+        '<%= locations.dest %>.min.js': ['<%= locations.dest %>.js', '<%= locations.dest_tpl %>'],
+        '<%= locations.dest %>.min.css': ['<%= locations.dest %>.css']
+      }
     },
 
     nodeunit: {
@@ -59,7 +74,7 @@ module.exports = function(grunt) {
       },
       lib: {
         options: {
-          jshintrc: 'lib/.jshintrc'
+          jshintrc: 'src/js/.jshintrc'
         },
         src: '<%= locations.js %>'
       },
@@ -68,10 +83,28 @@ module.exports = function(grunt) {
       },
     },
 
+    less: {
+      development: {
+        files: {
+          '<%= locations.dest %>.css': ['<%= locations.less %>'],
+          '<%= locations.dest %>-bootstrap.css': ['<%= locations.bootstrap_css %>']
+        }
+      },
+      production: {
+        options: {
+          cleancss: true
+        },
+        files: {
+          '<%= locations.dest %>.css': ['<%= locations.less %>'],
+          '<%= locations.dest %>-bootstrap.css': ['<%= locations.bootstrap_css %>']
+        }
+      }
+    },
+
     emberTemplates: {
      compile: {
         options: {
-          templateBasePath: "lib/templates"
+          templateBasePath: "src/js/templates"
         },
         files: {
           '<%= locations.dest %>-templates.js': ['<%= locations.hbs %>']
@@ -82,11 +115,11 @@ module.exports = function(grunt) {
     watch: {
       gruntfile: {
         files: '<%= locations.gruntFile %>',
-        tasks: ['emberTemplates','concat', 'copy', 'jshint:gruntfile']
+        tasks: ['emberTemplates', 'less:development', 'concat', 'copy', 'jshint:gruntfile']
       },
-      lib: {
-        files: ['<%= locations.js %>', '<%= locations.html %>', '<%= locations.hbs %>'],
-        tasks: ['emberTemplates', 'concat', 'copy']//, 'nodeunit','jshint:lib', 
+      src: {
+        files: ['<%= locations.js %>', '<%= locations.less %>','<%= locations.bootstrap_css %>', '<%= locations.html %>', '<%= locations.hbs %>'],
+        tasks: ['emberTemplates', 'less:development', 'concat', 'copy']//, 'nodeunit','jshint:lib', 
       },
       test: {
         files: '<%= locations.test %>',
@@ -100,7 +133,7 @@ module.exports = function(grunt) {
           // index file
           {
             expand: true,
-            cwd: 'lib/',
+            cwd: 'src/',
             src: ['index.html'],
             dest: 'dist/'
           },
@@ -141,6 +174,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-ember-templates');
 
   // Default task.

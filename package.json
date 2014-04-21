@@ -39,7 +39,8 @@
     "grunt-contrib-handlebars": "~0.8.0",
     "handlebars": "~1.3.0",
     "ember-template-compiler": "~1.6.0-beta.2",
-    "grunt-ember-templates": "~0.4.20"
+    "grunt-ember-templates": "~0.4.20",
+    "grunt-contrib-less": "^0.11.0"
   },
   "keywords": []
 }
