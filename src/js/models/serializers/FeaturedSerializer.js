@@ -8,8 +8,11 @@ App.FeaturedSerializer = DS.RESTSerializer.extend({
 	extractArray: function(store, type, payload, id, requestType) {
 		var previews = [];
 		var channels = [];
+		var featured = [];
+		// cleanup featured by trimming unused data, and created new featured array
 		payload.featured.forEach(function(item) {
 			item = item.stream;
+			featured.push(item);
 			// create a preview object and give an id
 			var preview = item.preview;
 			preview._id = item._id;
@@ -25,6 +28,7 @@ App.FeaturedSerializer = DS.RESTSerializer.extend({
 			item.channel = item._id;
 		});
 		// add previews array to payload
+		payload.featured = featured;
 		payload.previews = previews;
 		payload.channels = channels;
 

@@ -2,25 +2,4 @@
 	content=filters
 	selection=activeFilter
 }}
-
-<h3>Highest Viewers</h3>
-<ul class="list-group">
-	{{#each item in content}}
-		<li class="list-group-item">
-			<div class="media">
-				{{#with item.channel}}
-				<a class="pull-left" {{bind-attr href=url}} target="_blank">
-					<img class="media-object" {{bind-attr src=item.preview.small}} />
-				</a>
-				<div class="media-body">
-					<h3 class="media-heading">
-						<a {{bind-attr href=url}}  target="_blank">{{display_name}}</a>
-					</h3>
-					
-					<small>{{item.game}}</small> | <small>{{item.viewers}} viewers</small>
-				</div>
-				{{/with}}
-			</div>
-		</li>
-	{{/each}}
-</ul>
+{{outlet}}
