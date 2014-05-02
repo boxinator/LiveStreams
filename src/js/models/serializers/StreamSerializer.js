@@ -9,6 +9,7 @@ App.StreamSerializer = DS.RESTSerializer.extend({
 	extractArray: function(store, type, payload, id, requestType) {
 		var previews = [];
 		var channels = [];
+
 		payload.streams.forEach(function(item) {
 			// create a preview object and give an id
 			var preview = item.preview;
@@ -27,7 +28,6 @@ App.StreamSerializer = DS.RESTSerializer.extend({
 		// add previews array to payload
 		payload.previews = previews;
 		payload.channels = channels;
-
 		return this._super.apply(this, arguments);
 	}
 });

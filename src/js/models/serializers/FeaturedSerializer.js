@@ -11,7 +11,10 @@ App.FeaturedSerializer = DS.RESTSerializer.extend({
 		var featured = [];
 		// cleanup featured by trimming unused data, and created new featured array
 		payload.featured.forEach(function(item) {
+			// get stream object
 			item = item.stream;
+			// indicate that its featured
+			
 			featured.push(item);
 			// create a preview object and give an id
 			var preview = item.preview;

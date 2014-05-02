@@ -1,3 +1,1 @@
-App.StreamsFeaturedController = Ember.ArrayController.extend({
-	
-});
+App.StreamsFeaturedController = App.FilterableController.extend();

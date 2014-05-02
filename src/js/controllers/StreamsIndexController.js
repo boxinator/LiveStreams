@@ -1,0 +1,1 @@
+App.StreamsIndexController = App.FilterableController.extend();
