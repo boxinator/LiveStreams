@@ -1,1 +1,0 @@
-App.StreamsFeaturedController = App.FilterableController.extend();
